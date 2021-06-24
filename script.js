@@ -27,12 +27,14 @@ document
 queryParamsContainer.append(createKeyValuePair())
 requestHeadersContainer.append(createKeyValuePair())
 
+//when making the request we put the customData with the starttime to request object
 axios.interceptors.request.use(request => {
   request.customData = request.customData || {}
   request.customData.startTime = new Date().getTime()
   return request
 })
 
+//calculating the end time of the request
 function updateEndTime(response) {
   response.customData = response.customData || {}
   response.customData.time =
@@ -40,11 +42,13 @@ function updateEndTime(response) {
   return response
 }
 
+//when getting the response
 axios.interceptors.response.use(updateEndTime, e => {
   return Promise.reject(updateEndTime(e.response))
 })
 
 const { requestEditor, updateResponseEditor } = setupEditors()
+
 form.addEventListener("submit", e => {
   e.preventDefault()
 
